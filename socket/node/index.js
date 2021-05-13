@@ -3,6 +3,11 @@ const axios = require('axios');
 
 const app = express();
 
+/*
+  * Socket app
+*/
+
+
 app.get('/socket', (req, res) => {
   res.send('Hello from Socket');
 });
