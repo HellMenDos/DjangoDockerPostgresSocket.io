@@ -1,0 +1,146 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+<!-- Override extrahead to add Chart.js -->
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const barChart = document.getElementById('dateChart').getContext('2d');
+  const pieChart = document.getElementById('pieChart').getContext('2d');
+  const secbarchart = document.getElementById('barChart').getContext('2d');
+
+  // Sample data
+  const barData = {{ time_data | safe }};
+  
+  const pieData = {{ data | safe }}
+  const pieColor = {{ color | safe }}
+  const pieNames = {{ names | safe }}
+
+  let barSecond = {{ secondbar | safe }}
+  
+  // Parse the dates to JS
+  dt = []
+  barSecond.forEach((d,_) => {
+  
+    dt.push({
+        label: pieNames[_],
+        data: JSON.parse(d),
+        backgroundColor: pieColor[_],
+    })
+  })
+
+console.log(dt)
+  // Render the chart
+  const chart = new Chart(dateChart, {
+    type: 'bar',
+    data: {
+      datasets: [
+        {
+          label: '',
+          data: barData,
+          backgroundColor: 'rgba(220,20,20,0.5)',
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Статистика собранного вторсырья по датам к компаниям'
+      },
+      responsive: true,
+      scales: {
+        xAxes: [
+          {
+            type: 'time',
+            time: {
+              unit: 'day',
+              round: 'day',
+              displayFormats: {
+                day: 'MMM D',
+              },
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  const chartsecond = new Chart(pieChart,{
+ type: 'pie',
+    data: {
+      labels: pieNames,
+      datasets: [{
+        label: "Population (millions)",
+        backgroundColor: pieColor,
+        data: pieData
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Количество собранных к категориям'
+      }
+    }
+});
+
+  const chartsec = new Chart(secbarchart, {
+    type: 'bar',
+    data: {
+      datasets: dt,
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Килограммы к категориям за определенное время'
+      },
+      responsive: true,
+      scales: {
+        xAxes: [
+          {
+            type: 'time',
+            time: {
+              unit: 'day',
+              round: 'day',
+              displayFormats: {
+                day: 'MMM D',
+              },
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
+    },
+  });
+
+
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Render our chart -->
+<div style="display:flex; width:50%;">
+  <canvas style="margin-bottom: 30px; width: 300px; height: 200px" id="dateChart"></canvas>
+  <canvas style="margin-bottom: 30px; width: 300px; height: 200px" id="pieChart"></canvas>
+  
+</div>
+<canvas style="margin-bottom: 70px; width: 100%; height: 150px" id="barChart"></canvas>
+<!-- Render the rest of the ChangeList view -->
+{{ block.super }}
+{% endblock %}

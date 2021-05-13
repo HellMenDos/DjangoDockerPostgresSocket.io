@@ -1,0 +1,58 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ./django
+    command: python manage.py runserver 0.0.0.0:8080
+    volumes:
+      - ./django/api:/app
+      - static_volume:/app/static
+      - media_volume:/app/files/media
+    depends_on:
+      - db
+    environment:
+      - ACCOUNT_ID=AC506d30f98339e438061ee60e2d79ebe2
+      - AUTH_TOKEN=6ba154e0bad64887efa2298e2d7536fb
+    networks:
+      - my-network
+  
+  server:
+    build:
+      context: ./nginx
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/files/media
+    ports:
+      - 80:8000
+    depends_on:
+      - api
+      - socket
+    networks:
+      - my-network
+
+  socket:
+    build:
+      context: ./socket
+    networks:
+      - my-network
+
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=django_user
+      - POSTGRES_PASSWORD=django_password
+      - POSTGRES_DB=django_db
+    networks:
+      - my-network
+
+volumes:
+  postgres_volume:
+  static_volume:
+  media_volume:
+
+networks:
+  my-network:
+    external: true  
