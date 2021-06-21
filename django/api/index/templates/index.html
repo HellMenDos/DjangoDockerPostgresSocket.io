@@ -1,0 +1,8 @@
+<<script>
+    if(!/iPhone|iPad|iPod/i.test(navigator.userAgent)){
+        document.location.href = '{{ ios }}'
+    }else {
+        document.location.href = '{{ android }}'
+    }
+
+</script>

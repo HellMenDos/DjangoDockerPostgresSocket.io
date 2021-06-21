@@ -20,19 +20,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const pieNames = {{ names | safe }}
 
   let barSecond = {{ secondbar | safe }}
-  
+
+
   // Parse the dates to JS
   dt = []
   barSecond.forEach((d,_) => {
+    
+    dataOf = JSON.parse(d)
+    if (dataOf.length != 0) {
+    dataOf.forEach((el,id)=> {
+      el.y = JSON.parse(el.y)[pieNames[_]]
+    })
   
+
     dt.push({
-        label: pieNames[_],
-        data: JSON.parse(d),
+       label: pieNames[_],
+        data: dataOf,
         backgroundColor: pieColor[_],
     })
+    
+   }
   })
 
-console.log(dt)
   // Render the chart
   const chart = new Chart(dateChart, {
     type: 'bar',
@@ -56,8 +65,6 @@ console.log(dt)
           {
             type: 'time',
             time: {
-              unit: 'day',
-              round: 'day',
               displayFormats: {
                 day: 'MMM D',
               },
@@ -109,8 +116,6 @@ console.log(dt)
           {
             type: 'time',
             time: {
-              unit: 'day',
-              round: 'day',
               displayFormats: {
                 day: 'MMM D',
               },

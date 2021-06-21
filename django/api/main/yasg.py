@@ -6,9 +6,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Django Movie",
+      title="3R_GROUP_ADMINPANEL",
       default_version='v1',
-      description="Test description",
+      description="Api for 3R_GROUP_ADMINPANEL",
       license=openapi.License(name="BSD License"),
    ),
    public=True,

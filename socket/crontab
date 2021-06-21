@@ -1,0 +1,2 @@
+0,30 * * * * curl -s http://server:8000/push/send
+ 

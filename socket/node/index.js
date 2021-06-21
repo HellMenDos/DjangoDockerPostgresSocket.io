@@ -3,11 +3,6 @@ const axios = require('axios');
 
 const app = express();
 
-/*
-  * Socket app
-*/
-
-
 app.get('/socket', (req, res) => {
   res.send('Hello from Socket');
 });
@@ -25,12 +20,13 @@ io.on('connection', client => {
   })
   client.on('message',({user,room,message})=> {
     
-    axios.post('http://server:8000/inserMessage/',{user,room,message}).then((js)=> {
+    axios.post('http://server:8000/message/insert/',{user,room,message}).then((js)=> {
       console.log(js)
       io.to(room).emit('send',{user,message})
     }).catch((er)=> {
       console.log(er)
     }) 
+
   })
   
 });

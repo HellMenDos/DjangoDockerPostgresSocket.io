@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '3uqyntz%dy8pru5vkk6g%ryxi5-v#@dq7=*rek$%7&0clt)vhx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ['*']
@@ -35,15 +35,15 @@ CORS_ORIGIN_ALLOW_ALL = True
 INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.admin',
-    'django.contrib.auth',  
+    'django.contrib.auth',
     'djoser',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'index',
     'rest_framework',
     'rest_framework.authtoken',
+    'index',
     'drf_yasg',
     'conversation',
     'bonus',
@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,9 +68,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.common.CommonMiddleware',  
+    'django.middleware.common.CommonMiddleware',
 ]
-
 
 
 ROOT_URLCONF = 'main.urls'
@@ -94,19 +93,34 @@ TEMPLATES = [
 WSGI_APPLICATION = 'main.wsgi.application'
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_HEADER_TYPES': ('JWT',),
 }
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+}
+
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {},
+    'SERIALIZERS': {
+        'user_create': 'index.serializers.UserCreateSerializer',
+        'user': 'index.serializers.UserCreateSerializer',
+        'current_user': 'index.serializers.UserCreateSerializer',
+    },
+    'LOGIN_FIELD': 'email'
 }
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 
 DATABASES = {
     'default': {
@@ -157,8 +171,8 @@ USE_TZ = True
 
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = '*'
-EMAIL_HOST_PASSWORD = '*'
+EMAIL_HOST_USER = '3rgroup.ru@gmail.com'
+EMAIL_HOST_PASSWORD = 'Qq1103202'
 EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
@@ -171,7 +185,7 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "/static"
 # Аналогично static файлам
 MEDIA_URL = "/media/"
-MEDIA_ROOT =  "files/media"
+MEDIA_ROOT = "files/media"
 CKEDITOR_UPLOAD_PATH = "files/media"
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 
