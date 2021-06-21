@@ -11,8 +11,8 @@ services:
     depends_on:
       - db
     environment:
-      - ACCOUNT_ID=AC506d30f98339e438061ee60e2d79ebe2
-      - AUTH_TOKEN=70b435c6b7c8fcaf321711412db40df0
+      - ACCOUNT_ID=*
+      - AUTH_TOKEN=*
     networks:
       - my-network
   
